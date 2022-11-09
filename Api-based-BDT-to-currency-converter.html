@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    document.querySelector('form').onsubmit = function() {
+
+        fetch('https://open.er-api.com/v6/latest/BDT')
+        .then(response => response.json())
+        .then(jsonObj => {
+            console.log(Object.keys(jsonObj.rates))
+
+            console.log(jsonObj);
+            
+            const currency = document.querySelector('#currency').value.toUpperCase();
+
+            const rate = jsonObj.rates[currency] ;
+
+            if(rate !== undefined) {
+                document.querySelector('#result').innerHTML = `1 BDT is equal to ${rate.toFixed(3)} ${currency}`;
+            } else {
+                document.querySelector('#result').innerHTML = 'invalid currency'
+            }
+
+        }) 
+        .catch(error => {
+            console.log("Error: ", error)
+        });
+        return false;
+    }
+});
+</script>
+</head>
+
+
+<body>
+
+<form>
+    <h3> BDT to currency converter using API</h3>
+    <p> please enter currency in format: usd, eur etc</p>
+    <input type="text" id="currency" placeholder="Currency">
+    <input type="submit" value="Convert"> 
+</form>
+
+<div id="result">
+</div>
+
+</body>
+</html>
